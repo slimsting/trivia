@@ -15,15 +15,21 @@ const Options = () => {
     setIsQuizStarted(!isQuizStarted);
   }
 
-  console.table(options);
+  function handlePlayAgain() {
+    setIsQuizStarted(false);
+  }
+
   return (
     <>
       {!isQuizStarted && (
-        <form className="flex flex-col bg-slate-200 h-screen justify-center items-center text-normal p-12">
+        <form className="flex flex-col bg-yellow-100 h-screen justify-center items-center text-normal p-12">
+          <h1 className=" font-Indie font-medium text-5xl mb-8 text-violet-500">
+            Settings
+          </h1>
           <label className="flex flex-col gap-1 justify-center items-center ">
             <span className="font-semibold">Select Category:</span>
             <select
-              className=" rounded-md px-1 py-1 w-[200px] md:w-fit"
+              className=" rounded-md px-1 py-1 w-[200px]  border border-solid border-violet-400 text-violet-600 md:w-fit"
               name="category"
               id="category"
               value={options.category}
@@ -68,7 +74,7 @@ const Options = () => {
           <label className="mt-4 flex flex-col justify-center items-center ">
             <span className="mb-1 font-semibold">Select Difficulty: </span>
             <select
-              className="rounded-md px-1 py-1 "
+              className="rounded-md px-1 py-1 border border-solid text-violet-600 border-violet-400"
               name="difficulty"
               id="difficulty"
               value={options.difficulty}
@@ -79,14 +85,14 @@ const Options = () => {
               <option value=" ">Any Difficulty</option>
               <option value="&difficulty=easy">Easy</option>
               <option value="&difficulty=medium">Medium</option>
-              <option value="&difficulty=difficult">Difficult</option>
+              <option value="&difficulty=hard">Difficult</option>
             </select>
           </label>
 
           <label className="mt-4 flex flex-col justify-center items-center">
             <span className="mb-1 font-semibold">Type:</span>
             <select
-              className="rounded-md px-1 py-1 "
+              className="rounded-md px-1 py-1 border border-solid text-violet-600 border-violet-400 "
               name="type"
               id="type"
               value={options.type}
@@ -102,7 +108,7 @@ const Options = () => {
             <span className="mb-1 font-semibold">Number of Questions: </span>
 
             <input
-              className="rounded-md px-1 py-1 "
+              className="rounded-md px-1 py-1 border border-solid text-violet-600 border-violet-400 "
               type="number"
               id="numberOfQuestions"
               name="numberOfQuestions"
@@ -116,14 +122,16 @@ const Options = () => {
             />
           </label>
           <button
-            className="mt-4 bg-blue-800 rounded-full py-1 px-4 text-white hover:bg-blue-700"
+            className="mt-4 bg-violet-500 w-36 px- py-2 rounded-md mx-auto text-white font-semibold hover:bg-violet-400 active:bg-violet-600"
             onClick={startQuiz}
           >
             Proceed
           </button>
         </form>
       )}
-      {isQuizStarted && <Quiz options={options} />}
+      {isQuizStarted && (
+        <Quiz options={options} handlePlayAgain={handlePlayAgain} />
+      )}
     </>
   );
 };
