@@ -14,7 +14,7 @@ const Question = ({ question, handleChange }) => {
   });
   return (
     <div className="mb-4">
-      <h2 className="font-semibold">{question.question}</h2>
+      <h2 className="font-semibold">{`${question.qNumber}. ${question.question}`}</h2>
       <div className="mt-2 flex flex-wrap gap-2">{answersEl}</div>
       <hr className="mt-4 border-t border-violet-300" />
     </div>

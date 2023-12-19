@@ -18,6 +18,8 @@ const Quiz = ({ options, handlePlayAgain }) => {
         const res = await fetch(link);
         const data = await res.json();
 
+        let questionNumber = 0;
+
         const reformattedData = data.results.map((question) => {
           //decode incorrect answers in the array in each question object
           const decodedIncorrectAnswers = question.incorrect_answers.map(
@@ -35,14 +37,19 @@ const Quiz = ({ options, handlePlayAgain }) => {
           // add the correct answer to a random index in the array for all answers
           allAnswers.splice(randomIndex, 0, decode(question.correct_answer));
 
+          questionNumber++;
+
           return {
             question: decode(question.question),
             correctAnswer: decode(question.correct_answer),
             allAnswers: allAnswers,
             selectedAnswer: "",
             id: nanoid(),
+            qNumber: questionNumber,
           };
         });
+
+        console.table(reformattedData)
 
         setQuizdata(reformattedData);
       }
