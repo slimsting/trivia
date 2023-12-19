@@ -49,7 +49,7 @@ const Quiz = ({ options, handlePlayAgain }) => {
           };
         });
 
-        console.table(reformattedData)
+        console.table(reformattedData);
 
         setQuizdata(reformattedData);
       }
@@ -103,6 +103,10 @@ const Quiz = ({ options, handlePlayAgain }) => {
     <QuizCompletedContext.Provider value={isQuizCompleted}>
       <div className="bg-yellow-100 min-h-screen flex items-center justify-center">
         <div className=" min-h-screen p-8 flex flex-col max-w-[800px] mx-auto bg-yellow-100">
+          <h1 className="mx-auto text-5xl mb-4 font-Indie text-violet-500">
+            {" "}
+            <span className="">Q</span>uestions
+          </h1>
           {questionsEl}
           {!isQuizCompleted && quizData.length > 0 && (
             <button
