@@ -45,7 +45,7 @@ const Quiz = ({ options, handlePlayAgain }) => {
             allAnswers: allAnswers,
             selectedAnswer: "",
             id: nanoid(),
-            qNumber: questionNumber,
+            questionNumber: questionNumber,
           };
         });
 
@@ -103,10 +103,11 @@ const Quiz = ({ options, handlePlayAgain }) => {
     <QuizCompletedContext.Provider value={isQuizCompleted}>
       <div className="bg-yellow-100 min-h-screen flex items-center justify-center">
         <div className=" min-h-screen p-8 flex flex-col max-w-[800px] mx-auto bg-yellow-100">
-          <h1 className="mx-auto text-5xl mb-4 font-Indie text-violet-500">
-            {" "}
-            <span className="">Q</span>uestions
-          </h1>
+          {quizData.length > 0 && (
+            <h1 className="mx-auto text-5xl mb-4 font-Indie text-violet-500">
+              Questions
+            </h1>
+          )}
           {questionsEl}
           {!isQuizCompleted && quizData.length > 0 && (
             <button
@@ -119,7 +120,7 @@ const Quiz = ({ options, handlePlayAgain }) => {
           {isQuizCompleted && (
             <>
               <h1 className="mx-auto mb-3 text-xl text-center text-violet-800 font-semibold">
-                You scored {score}/{options.numberOfQuestions} correct answers!
+                You got {score}/{options.numberOfQuestions} right!
               </h1>
               <button
                 onClick={handlePlayAgain}
