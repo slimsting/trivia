@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const Home = ({ handleStart }) => {
+const Home = () => {
+  const navigate = useNavigate();
+
+  function handleStart() {
+    console.log("clicked");
+    navigate("/Settings");
+  }
   return (
     <div className=" bg-yellow-100 flex flex-col h-screen justify-center items-center ">
       <h1 className=" text-7xl mb-2 font-semibold font-Indie bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">

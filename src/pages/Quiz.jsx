@@ -1,64 +1,59 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import { decode } from "he";
-import { QuizCompletedContext } from "./QuizCompletedContext";
-import Question from "./Question";
+import { QuizCompletedContext } from "../components /QuizCompletedContext";
+import Question from "../components /Question";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../components /Loading";
 
-const Quiz = ({ options, handlePlayAgain }) => {
+const Quiz = () => {
+  const { data } = useParams();
+
+  const options = JSON.parse(data);
+
   const link = `https://opentdb.com/api.php?amount=${options.numberOfQuestions}${options.category}${options.difficulty}${options.type}`;
 
-  console.log(link);
-
-  const [quizData, setQuizdata] = useState([]);
+  const [again, setAgain] = useState(false);
   const [isQuizCompleted, setIsQuizCompleted] = useState(false);
   const [score, setScore] = useState(0);
-  useEffect(() => {
-    try {
-      async function initializeQuiz() {
-        const res = await fetch(link);
-        const data = await res.json();
+  const [database, setDatabase] = useState(null)
 
-        let questionNumber = 0;
+  const questionsQuery = useQuery({
+    queryKey: ["questions"],
+    queryFn: async () => {
+      const res = await axios.get(link);
+      return res.data;
+    },
+  });
 
-        const reformattedData = data.results.map((question) => {
-          //decode incorrect answers in the array in each question object
-          const decodedIncorrectAnswers = question.incorrect_answers.map(
-            (answer) => {
-              return decode(answer);
-            }
-          );
+  if (questionsQuery.isLoading) {
+    return <Loading />;
+  }
 
-          // initialize array for all answers with the incorrect answers
-          let allAnswers = decodedIncorrectAnswers;
-          const randomIndex = Math.floor(
-            Math.random() * (allAnswers.length + 1)
-          );
+  let questionNumber = 0;
 
-          // add the correct answer to a random index in the array for all answers
-          allAnswers.splice(randomIndex, 0, decode(question.correct_answer));
+  let quizData = questionsQuery.data.results.map((question) => {
+    let allAnswers = question.incorrect_answers.map((answer) => decode(answer));
+    const randomIndex = Math.floor(Math.random() * (allAnswers.length + 1));
 
-          questionNumber++;
+    console.log(randomIndex);
 
-          return {
-            question: decode(question.question),
-            correctAnswer: decode(question.correct_answer),
-            allAnswers: allAnswers,
-            selectedAnswer: "",
-            id: nanoid(),
-            questionNumber: questionNumber,
-          };
-        });
+    allAnswers.splice(randomIndex, 0, decode(question.correct_answer));
 
-        console.table(reformattedData);
+    questionNumber++;
+    return {
+      question: decode(question.question),
+      correctAnswer: decode(question.correct_answer),
+      allAnswers: allAnswers,
+      selectedAnswer: "",
+      id: nanoid(),
+      questionNumber: questionNumber,
+    };
+  });
 
-        setQuizdata(reformattedData);
-      }
-
-      initializeQuiz();
-    } catch (err) {
-      console.log("An error has occured while trying to retrieve data" + err);
-    }
-  }, []);
+  // setDatabase(quizData)
 
   function handleChange(e, questionID) {
     const value = e.target.value;
@@ -71,9 +66,7 @@ const Quiz = ({ options, handlePlayAgain }) => {
       }
     });
 
-    setQuizdata(newQuizData);
-    console.table(quizData);
-    console.log(value);
+    quizData = newQuizData;
   }
 
   function handleCheckAnswers() {
@@ -89,6 +82,14 @@ const Quiz = ({ options, handlePlayAgain }) => {
     setScore(score);
   }
 
+  function handlePlayAgain() {
+    console.log("play again clicked");
+    setIsQuizCompleted(!isQuizCompleted);
+    setAgain(!again);
+    setScore(0);
+  }
+
+  console.table(quizData);
   const questionsEl = quizData.map((question) => {
     return (
       <Question
@@ -108,11 +109,13 @@ const Quiz = ({ options, handlePlayAgain }) => {
               Questions
             </h1>
           )}
+
           {questionsEl}
+
           {!isQuizCompleted && quizData.length > 0 && (
             <button
               onClick={handleCheckAnswers}
-              className="bg-violet-500 w-36 px- py-2 rounded-md mx-auto text-white font-semibold hover:bg-violet-400 active:bg-violet-600"
+              className="bg-violet-500 w-36 px-2 py-2 rounded-md mx-auto text-white font-semibold hover:bg-violet-400 active:bg-violet-600"
             >
               Check Answers
             </button>

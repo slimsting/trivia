@@ -1,18 +1,15 @@
-import { useState } from "react";
-import Home from "./components /Home";
-import Quiz from "./components /Quiz";
-import Options from "./components /Options";
+import Home from "./pages/Home";
+import Settings from "./pages/Settings";
+import { Route, Routes } from "react-router-dom";
+import Quiz from "./pages/Quiz";
 
 function App() {
-  const [start, setStart] = useState(false);
-  const handleStart = () => {
-    setStart(!start);
-  };
   return (
-    <>
-      {!start && <Home handleStart={handleStart} />}
-      {start && <Options />}
-    </>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/Quiz/:data" element={<Quiz />} />
+    </Routes>
   );
 }
 
