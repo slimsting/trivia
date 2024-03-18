@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
-import { QuizCompletedContext } from "./QuizCompletedContext";
+import { QuizCompletedContext } from "./Context";
 
-const Answer = ({ answer, question, handleChange }) => {
+const Answer = ({ answer, question, handleChange, handleColor }) => {
   const isQuizCompleted = useContext(QuizCompletedContext);
-  const [reload, setReload] = useState(false)
+  const [change, setChange] = useState(false);
 
-  console.log(question);
+  // console.log(question);
 
   // console.log(question.selectedAnswer);
   let className = null;
@@ -17,7 +17,7 @@ const Answer = ({ answer, question, handleChange }) => {
         : "bg-gray-100 leading-4 py-1 px-3 rounded-md border border-solid border-violet-300 hover:bg-violet-200 active:bg-violet-500";
   } else {
     if (answer === question.correctAnswer) {
-      console.log(question.correctAnswer);
+      // console.log(question.correctAnswer);
       className =
         "bg-green-500 leading-4 py-1 px-3 rounded-md pointer-events-none border border-solid border-violet-300 ";
     } else {
@@ -36,7 +36,9 @@ const Answer = ({ answer, question, handleChange }) => {
         name={question.id}
         id="heat sink"
         value={answer}
-        onChange={(e) => handleChange(e, question.id)}
+        onChange={(e) => {
+          handleChange(e, question.id);
+        }}
       />
       {answer}
     </label>

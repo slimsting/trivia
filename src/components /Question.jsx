@@ -10,6 +10,7 @@ const Question = ({ question, handleChange }) => {
         answer={answer}
         question={question}
         handleChange={handleChange}
+       
       />
     );
   });
